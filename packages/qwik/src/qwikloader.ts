@@ -281,8 +281,15 @@ export const qwikLoader = (
       roots: roots,
       push: processEventOrNode,
     };
-    addEventListener(doc, 'readystatechange', processReadyStateChange);
-    processReadyStateChange();
+    if (document.querySelector('[name="astro-view-transitions-enabled"][content="true"]')) {
+      addEventListener(doc, 'astro:page-load', () => {
+        hasInitialized = 0;
+        processReadyStateChange();
+      });
+    } else {
+      addEventListener(doc, 'readystatechange', processReadyStateChange);
+      processReadyStateChange();
+    }
   }
 };
 
